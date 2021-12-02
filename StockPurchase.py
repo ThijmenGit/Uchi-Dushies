@@ -30,7 +30,8 @@ class StockPurchase:
         try:
             agreed_amount = int(input(f"How many stocks would you like to buy for €{self.stock_price} per stock? "))
             transaction_price = self.stock_price * agreed_amount
-            print(f"Congratulations! You've bought the stock, right on track to become a Sensei! The total amount of this transaction will be €{transaction_price}")
+            print(f"Congratulations! You've bought the stock, right on track to become a Sensei!"
+                  f"The total amount of this transaction will be €{transaction_price}")
             return
         except ValueError:
             print("This input is not recognized. Please insert a round number")
