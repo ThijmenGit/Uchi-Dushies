@@ -44,6 +44,7 @@ if __name__=="__main__":
     API = APIRequest()
     df = API.getspecificvalue('2020-01-01')
     print(df)
+    #date
 
 
 
