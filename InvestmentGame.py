@@ -7,22 +7,24 @@ class APIRequest:
 
     @staticmethod
     def getstockmetadata(): 
-        query = input("What would you like: ")
+        try:
+            query = input("What would you like: ")
 
-        url = (f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={query}&apikey=73R6EIWTFXMUJFO0')
-        r = requests.get(url)
-        data = r.json()
+            url = (f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={query}&apikey=73R6EIWTFXMUJFO0')
+            r = requests.get(url)
+            data = r.json()
 
-        counter = 0
-        for item in data['bestMatches']:
-            counter += 1
-            print(f"Option {counter}: \n \t Company name is: {item['2. name']} \n \t Tracker is: {item['1. symbol']} \n \t Region is: {item['4. region']} \n \t Currency is: {item['8. currency']}")
+            counter = 0
+            for item in data['bestMatches']:
+                counter += 1
+                print(f"Option {counter}: \n \t Company name is: {item['2. name']} \n \t Tracker is: {item['1. symbol']} \n \t Region is: {item['4. region']} \n \t Currency is: {item['8. currency']}")
 
-
-
-        option = int(input("Enter the option number of the stock you want to buy: "))
-        stockmetadata = (data['bestMatches'][option-1])
-        return stockmetadata
+            option = int(input("Enter the option number of the stock you want to buy: "))
+            stockmetadata = (data['bestMatches'][option-1])
+            return stockmetadata
+        except ValueError:
+            print("No stock data available for this stock, please try another one")
+            getstockmetadata()
 
     @staticmethod
     def getcurrentvalue(stockname):
