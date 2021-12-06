@@ -25,7 +25,7 @@ def buy_stock(stock_to_buy):
             stock_to_buy["Timestamp"] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             stock_to_buy["Buy/Sell"] = 1
             portfolio.append(stock_to_buy)
-        print(float(stock_to_buy['Price']))
+        # print(float(stock_to_buy['Price']))
         #transaction_price = round(float(stock_to_buy['Price']) * amount,3)
         #print(f"The total value of this transaction will be €{transaction_price} ")
         return portfolio
