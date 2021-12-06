@@ -6,7 +6,7 @@ class APIRequest:
         return
 
     @staticmethod
-    def getstockmetadata():
+    def getstockmetadata(): 
         query = input("What would you like: ")
 
         url = (f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={query}&apikey=73R6EIWTFXMUJFO0')
@@ -19,23 +19,35 @@ class APIRequest:
             print(f"Option {counter}: \n \t Company name is: {item['2. name']} \n \t Tracker is: {item['1. symbol']} \n \t Region is: {item['4. region']} \n \t Currency is: {item['8. currency']}")
 
 
-        option = int(input("Enter the symbol of the Stock you want to buy: "))
+
+        option = int(input("Enter the option number of the stock you want to buy: "))
         stockmetadata = (data['bestMatches'][option-1])
         return stockmetadata
+
 
     def getcurrentvalue(self, stockname):
         df = []
         tracker = stockname['1. symbol']
         url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={tracker}&outputsize=full&apikey=73R6EIWTFXMUJFO0"
         response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError("Could not retrieve data, code:", response.status_code)
         raw_data = response.json()
-        df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime('%Y-%d-%m')])
+
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime(str(yesterday))])
         return(df[0])
+
+#'%Y-%d-%m'
+#.strftime('%Y-%d-%m')
 
     def getspecificvalue(self, stockdate, stockname):
         df = []
         tracker = stockname['1. symbol']
         response = requests.get(f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={tracker}&outputsize=full&apikey=73R6EIWTFXMUJFO0")
+        if response.status_code != 200:
+            raise ValueError("Could not retrieve data, code:", response.status_code)
         raw_data = response.json()
         df.append(raw_data['Time Series (Daily)'][stockdate])
         return(df[0])
@@ -67,27 +79,4 @@ if __name__=="__main__":
     #df = API.getspecificvalue('2020-01-01', stockmetadata)
     stockpackage = API.stockpackage(stockmetadata, stockprice)
     print(stockpackage)
-
-
-
-
-
-
-#    car = Car()
-#    car.drive(10)
-#    car.drive(350)
-#    print(car)
-
-# Since we are retrieving stuff from a web service, it's a good idea to check for the return status code
-# See: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-#    if response.status_code != 200:
-#        raise ValueError("Could not retrieve data, code:", response.status_code)
-
-# The service sends JSON data, we parse that into a Python datastructure
-    
-#stockname = KPN
-#currentprice = 11
-#high = x
-#low = y
-
 
