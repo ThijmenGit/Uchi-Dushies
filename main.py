@@ -49,6 +49,8 @@ while True:
             user.add_stock_to_portfolio(stocks_bought)
             wait = input("Press enter to continue to the main menu.")
         elif int(action) == 5:  # SELL STOCK
+            stock_sold = sell()
+            user.remove_stock_from_portfolio(stock_sold)
             print('hi')
     except ValueError:
         print("!!!!! You didn't enter a menu option number, you can try again in 3 seconds.")

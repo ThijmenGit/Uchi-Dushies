@@ -44,6 +44,7 @@ class User:
         return True
 
     def remove_stock_from_portfolio(self, stock_df):
+        # todo check if stocks can be sold before appending to prevent < 0
         self.portfolio = self.portfolio.append(stock_df)
         self._write_portfolio_to_file()
         return True
