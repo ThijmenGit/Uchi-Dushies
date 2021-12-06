@@ -19,9 +19,10 @@ class APIRequest:
 
 
 
-        option = int(input("Enter the symbol of the Stock you want to buy: "))
+        option = int(input("Enter the option number of the stock you want to buy: "))
         stockmetadata = (data['bestMatches'][option-1])
         return stockmetadata
+
 
     def getcurrentvalue(self, stockname):
         df = []
@@ -31,8 +32,14 @@ class APIRequest:
         if response.status_code != 200:
             raise ValueError("Could not retrieve data, code:", response.status_code)
         raw_data = response.json()
-        df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime('%Y-%d-%m')])
+
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime(str(yesterday))])
         return(df[0])
+
+#'%Y-%d-%m'
+#.strftime('%Y-%d-%m')
 
     def getspecificvalue(self, stockdate, stockname):
         df = []
