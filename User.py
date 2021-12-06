@@ -6,6 +6,7 @@ import os
 class User:
     def __init__(self, name):
         self.name = name
+        self.balance = 0
         self.csv_file_path = f'./portfolio_data/{name}'
         if os.path.isfile(self.csv_file_path):
             # existing user, load portfolio
@@ -21,6 +22,9 @@ class User:
         f.write(df_csv)
         f.close()
         return True
+
+    def get_balance(self):
+        return self.balance
 
     def get_portfolio(self):
         grouped_by_stock = self.portfolio.groupby(
@@ -60,6 +64,20 @@ class User:
         except KeyError:
             print("Stock not removed from portfolio, one of the input fields was not provided")
             return False
+
+    def transfer_money_to_account(self, amount):
+        if not amount.isnumeric():
+            return "You didn't enter a numeric value, please try again."
+        self.balance = self.balance + int(amount)
+        return f"Transaction succeeded, your new balance is {self.balance}"
+
+    def transfer_money_from_account(self, amount):
+        if not amount.isnumeric():
+            return "You didn't enter a numeric value, please try again."
+        if self.balance < int(amount):
+            return "Your balance is not sufficient to withdraw this amount of money. Try again."
+        self.balance = self.balance - int(amount)
+        return f"Transaction succeeded, your new balance is {self.balance}"
 
 
 if __name__ == "__main__":
