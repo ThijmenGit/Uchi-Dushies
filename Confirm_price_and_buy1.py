@@ -57,6 +57,6 @@ def purchase():
             purchase()
         else:
             print("exceptions")
-
-df = purchase()
-print(df)
+if __name__ == "__main__":
+    df = purchase()
+    print(df)
