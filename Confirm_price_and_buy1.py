@@ -39,7 +39,8 @@ def buy_stock(stock_to_buy):
 def purchase():
     while True:
         portfolio = []
-        stockmetadata = APIRequest.getstockmetadata()
+        api = APIRequest()
+        stockmetadata = api.getstockmetadata()
         stockprice = APIRequest.getcurrentvalue(stockmetadata)
         stock_info = APIRequest.stockpackage(stockmetadata, stockprice)
 
@@ -47,7 +48,6 @@ def purchase():
         if outcome == True:
             portfolio = buy_stock(stock_info)
             df = pd.DataFrame(portfolio, columns = ['Tracker', 'Name', 'Region', 'Currency', 'Price', 'Timestamp', 'Buy/Sell'])
-            print("Current portfolio holds: \n", df, "\n") ## Insert dataframe here?
             df['Price'] = df['Price'].astype(float)
             portfoliosum = round(df['Price'].sum(),3)
             print(f"The value of this transaction is {stock_info['Currency']} {portfoliosum}")
@@ -57,6 +57,8 @@ def purchase():
             purchase()
         else:
             print("exceptions")
+
+
 if __name__ == "__main__":
     df = purchase()
     print(df)

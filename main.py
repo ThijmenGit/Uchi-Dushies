@@ -1,8 +1,10 @@
 from User import User
 import time
-from Confirm_price_and_buy1 import buy_stocks
+from Confirm_price_and_buy1 import purchase
+from Confirm_price_and_sell import sell
+import pandas as pd
 
-
+pd.set_option("display.max_rows", None, "display.max_columns", None)
 print("Welcome to the investment game Uchi-Dushie! Start playing to become a Sensei Master!")
 
 name = None
@@ -30,20 +32,22 @@ while True:
             amount = input("How much would you like to transfer to your account? ")
             message = user.transfer_money_to_account(amount)
             print(message)
-            print("You will be redirected to the menu in 2 seconds.")
+            wait = input("Press enter to continue to the main menu.")
             time.sleep(2)
         elif int(action) == 2:  # TRANSFER FROM ACCOUNT
             amount = input("How much would you like to transfer from your account? ")
             message = user.transfer_money_from_account(amount)
             print(message)
-            print("You will be redirected to the menu in 2 seconds.")
+            wait = input("Press enter to continue to the main menu.")
             time.sleep(2)
         elif int(action) == 3:  # SHOW PORTFOLIO
             print("Your portfolio currently contains the following stocks:")
             print(user.get_portfolio())
             wait = input("Press enter to continue to the main menu.")
         elif int(action) == 4:  # BUY STOCK
-            stocks_bought = buy_stocks()
+            stocks_bought = purchase()
+            user.add_stock_to_portfolio(stocks_bought)
+            wait = input("Press enter to continue to the main menu.")
         elif int(action) == 5:  # SELL STOCK
             print('hi')
     except ValueError:

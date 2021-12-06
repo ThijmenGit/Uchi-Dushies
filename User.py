@@ -3,6 +3,8 @@ from datetime import datetime
 import os
 
 
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -13,8 +15,7 @@ class User:
             self.portfolio = pd.read_csv(self.csv_file_path)
         else:
             # new user, start with empty portfolio
-            self.portfolio = pd.DataFrame(None, columns=['Tracker', 'Name', 'Region', 'Currency', 'TransactionPrice',
-                                                         'TransactionDate', 'BuyOrSell'])
+            self.portfolio = pd.DataFrame(None, columns=['Tracker', 'Name', 'Region', 'Currency', 'Price', 'Timestamp', 'Buy/Sell'])
 
     def _write_portfolio_to_file(self):
         df_csv = self.portfolio.to_csv(index=False)
@@ -28,42 +29,24 @@ class User:
 
     def get_portfolio(self):
         grouped_by_stock = self.portfolio.groupby(
-            ['Tracker'])['BuyOrSell'].agg('sum')
+            ['Name'])['Buy/Sell'].agg('sum')
         return grouped_by_stock.to_string()
 
-    def add_stock_to_portfolio(self, stock):
-        try:
-            self.portfolio = self.portfolio.append({
-                'Tracker': stock['Tracker'],
-                'Name': stock['Name'],
-                'Region': stock['Region'],
-                'Currency': stock['Currency'],
-                'TransactionPrice': stock['TransactionPrice'],
-                'TransactionDate': datetime.today(),
-                'BuyOrSell': 1
-            }, ignore_index=True)
-            self._write_portfolio_to_file()
-            return True
-        except KeyError:
-            print("Stock not added to portfolio, one of the input fields was not provided")
-            return False
+    def add_stock_to_portfolio(self, stock_df):
+        # print("DF PORTFOLIO -------------------------")
+        # print(self.portfolio)
+        # print("STOCKS BOUGHT PORTFOLIO -------------------------")
+        # print(stock_df)
+        # print("MERGED PORTFOLIO -------------------------")
+        self.portfolio = self.portfolio.append(stock_df)
+        # print(self.portfolio)
+        self._write_portfolio_to_file()
+        return True
 
-    def remove_stock_from_portfolio(self, stock):
-        try:
-            self.portfolio = self.portfolio.append({
-                'Tracker': stock['Tracker'],
-                'Name': stock['Name'],
-                'Region': stock['Region'],
-                'Currency': stock['Currency'],
-                'TransactionPrice': stock['TransactionPrice'],
-                'TransactionDate': datetime.today(),
-                'BuyOrSell': -1
-            }, ignore_index=True)
-            self._write_portfolio_to_file()
-            return True
-        except KeyError:
-            print("Stock not removed from portfolio, one of the input fields was not provided")
-            return False
+    def remove_stock_from_portfolio(self, stock_df):
+        self.portfolio = self.portfolio.append(stock_df)
+        self._write_portfolio_to_file()
+        return True
 
     def transfer_money_to_account(self, amount):
         if not amount.isnumeric():

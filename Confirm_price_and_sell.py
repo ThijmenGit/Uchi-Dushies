@@ -22,9 +22,9 @@ def sell_stock(stock_to_sell):
             stock_to_sell["Timestamp"] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             stock_to_sell["Buy/Sell"] = -1
             portfolio.append(stock_to_sell)
-        print(float(stock_to_sell['Price']))
-        transaction_price = round(float(stock_to_sell['Price']) * amount,3)
-        print(f"The total value of this transaction will be €{transaction_price} ")
+        #print(float(stock_to_sell['Price']))
+        #transaction_price = round(float(stock_to_sell['Price']) * amount,3)
+        #print(f"The total value of this transaction will be €{transaction_price} ")
         return portfolio
     except ValueError:
             print("This is not a recognized input. Please insert a round number")
@@ -33,7 +33,8 @@ def sell_stock(stock_to_sell):
 def sell():
     while True:
         portfolio = []
-        stockmetadata = APIRequest.getstockmetadata()
+        api = APIRequest()
+        stockmetadata = api.getstockmetadata()
         stockprice = APIRequest.getcurrentvalue(stockmetadata)
         stock_info = APIRequest.stockpackage(stockmetadata, stockprice)
 
@@ -52,5 +53,7 @@ def sell():
         else:
             print("exceptions")
 
-df = sell()
-print(df)
+
+if __name__ == "__main__":
+    df = sell()
+    print(df)
