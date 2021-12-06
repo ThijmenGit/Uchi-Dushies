@@ -7,7 +7,6 @@ import datetime
 def agree_price(stock_to_buy):
     agreed_price = ''
     while agreed_price.lower() != "y" and agreed_price.lower() != "n":
-        print("Please insert 'y' or 'n'")
         agreed_price = input(f"Do you wish to buy {stock_to_buy['Name']} at {stock_to_buy['Currency']} {stock_to_buy['Buyingprice']}? (y/n) ")
 
     if agreed_price.lower() == 'y':
@@ -47,7 +46,7 @@ def purchase():
         if outcome == True:
             portfolio = buy_stock(stock_to_buy)
             df = pd.DataFrame(portfolio, columns = ['Tracker', 'Name', 'Region', 'Currency', 'Buyingprice', 'Timestamp', 'Buy/Sell'])
-            print("Current portfolio holds: \n", df, "\n") ## Insert dataframe here?
+            print("Current portfolio holds: \n", df, "\n")
             df['Buyingprice'] = df['Buyingprice'].astype(float)
             portfoliosum = round(df['Buyingprice'].sum(),3)
             print(f"The value of this transaction is {stock_to_buy['Currency']} {portfoliosum}")
