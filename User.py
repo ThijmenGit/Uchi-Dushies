@@ -1,17 +1,31 @@
 import pandas as pd
 from datetime import datetime
+import os
 
 
 class User:
     def __init__(self, name):
         self.name = name
-        self.portfolio = pd.DataFrame(None, columns=['Tracker', 'Name', 'Region', 'Currency', 'TransactionPrice',
-                                                     'TransactionDate', 'BuyOrSell'])
-        # todo if data file exists, load portfolio
+        self.csv_file_path = f'./portfolio_data/{name}'
+        if os.path.isfile(self.csv_file_path):
+            # existing user, load portfolio
+            self.portfolio = pd.read_csv(self.csv_file_path)
+        else:
+            # new user, start with empty portfolio
+            self.portfolio = pd.DataFrame(None, columns=['Tracker', 'Name', 'Region', 'Currency', 'TransactionPrice',
+                                                         'TransactionDate', 'BuyOrSell'])
+
+    def _write_portfolio_to_file(self):
+        df_csv = self.portfolio.to_csv(index=False)
+        f = open(self.csv_file_path, "w")
+        f.write(df_csv)
+        f.close()
+        return True
 
     def get_portfolio(self):
-        grouped_by_stock = self.portfolio.groupby(['Tracker'])['BuyOrSell'].agg('sum')
-        return grouped_by_stock
+        grouped_by_stock = self.portfolio.groupby(
+            ['Tracker'])['BuyOrSell'].agg('sum')
+        return grouped_by_stock.to_string()
 
     def add_stock_to_portfolio(self, stock):
         try:
@@ -24,9 +38,10 @@ class User:
                 'TransactionDate': datetime.today(),
                 'BuyOrSell': 1
             }, ignore_index=True)
+            self._write_portfolio_to_file()
             return True
         except KeyError:
-            print("Stock not removed from portfolio, one of the input fields was not provided")
+            print("Stock not added to portfolio, one of the input fields was not provided")
             return False
 
     def remove_stock_from_portfolio(self, stock):
@@ -40,6 +55,7 @@ class User:
                 'TransactionDate': datetime.today(),
                 'BuyOrSell': -1
             }, ignore_index=True)
+            self._write_portfolio_to_file()
             return True
         except KeyError:
             print("Stock not removed from portfolio, one of the input fields was not provided")
@@ -51,4 +67,5 @@ if __name__ == "__main__":
     luke.add_stock_to_portfolio({'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur', 'TransactionPrice': '2.78'})
     luke.add_stock_to_portfolio({'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur', 'TransactionPrice': '2.78'})
     luke.remove_stock_from_portfolio({'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur', 'TransactionPrice': '2.78'})
+    luke.add_stock_to_portfolio({'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur', 'TransactionPrice': '2.78'})
     print(luke.get_portfolio())
