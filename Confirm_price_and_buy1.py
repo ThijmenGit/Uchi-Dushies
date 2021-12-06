@@ -1,7 +1,12 @@
 import pandas as pd
+from InvestmentGame import APIRequest
 
 portfolio = []
-df = pd.DataFrame(portfolio, columns = ['Tracker', 'Name', 'Region', 'Currency', 'Buyingprice'])
+
+stockmetadata = APIRequest.getstockmetadata()
+print(stockmetadata)
+stockprice = APIRequest.getcurrentvalue(stockmetadata)
+stock_to_buy = APIRequest.stockpackage(stockmetadata, stockprice)
 
 def agree_price():
     agreed_price = ''
@@ -20,10 +25,9 @@ def agree_price():
 def buy_stock():
     try:
         amount = int(input(f"How many stocks would you like to buy? "))
-        stock_to_buy = {"Name": "Apple", "Region": "Amsterdam", "Currency": "euros","Buyingprice": 350}  ## getstockprice()
         for i in range(amount):
-            portfolio.append(f"{stock_to_buy}")
-        transaction_price = stock_to_buy["Buyingprice"] * amount
+            portfolio.append(stock_to_buy)
+        transaction_price = stock_to_buy["Lastprice"] * amount
         print(f"The total costs of this transaction will be €{transaction_price} ")
         return transaction_price
     except ValueError:
@@ -35,7 +39,10 @@ outcome = agree_price()
 if outcome == True:
     print("Got it")
     buy_stock()
-    print("Current portfolio holds", df)
+    df = pd.DataFrame(portfolio, columns = ['Tracker', 'Name', 'Region', 'Currency', 'Lastprice'])
+    print("Current portfolio holds: \n", df, "\n") ## Insert dataframe here?
+
+    print("After this transaction the total worth of your portfolio is €", df["Lastprice"].sum())
 elif outcome == False:
     print("Moving back up")
     ## Refer back to code Thijmen to check different stockname + price
