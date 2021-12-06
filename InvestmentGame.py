@@ -28,6 +28,8 @@ class APIRequest:
         tracker = stockname['1. symbol']
         url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={tracker}&outputsize=full&apikey=73R6EIWTFXMUJFO0"
         response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError("Could not retrieve data, code:", response.status_code)
         raw_data = response.json()
         df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime('%Y-%d-%m')])
         return(df[0])
@@ -36,6 +38,8 @@ class APIRequest:
         df = []
         tracker = stockname['1. symbol']
         response = requests.get(f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={tracker}&outputsize=full&apikey=73R6EIWTFXMUJFO0")
+        if response.status_code != 200:
+            raise ValueError("Could not retrieve data, code:", response.status_code)
         raw_data = response.json()
         df.append(raw_data['Time Series (Daily)'][stockdate])
         return(df[0])
@@ -67,16 +71,6 @@ if __name__=="__main__":
     #df = API.getspecificvalue('2020-01-01', stockmetadata)
     stockpackage = API.stockpackage(stockmetadata, stockprice)
     print(stockpackage)
-
-
-
-
-
-
-#    car = Car()
-#    car.drive(10)
-#    car.drive(350)
-#    print(car)
 
 # Since we are retrieving stuff from a web service, it's a good idea to check for the return status code
 # See: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
