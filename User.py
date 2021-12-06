@@ -40,11 +40,12 @@ class User:
         self._write_portfolio_to_file()
         return "The stocks have been added to your portfolio, congratulations!"
 
-    def remove_stock_from_portfolio(self, stock_df):
+    def remove_stock_from_portfolio(self, stock_df, transaction_value):
         # todo check if stocks can be sold before appending to prevent < 0
+        self.balance = self.balance + transaction_value
         self.portfolio = self.portfolio.append(stock_df)
         self._write_portfolio_to_file()
-        return True
+        return "The stocks have been sold"
 
     def transfer_money_to_account(self, amount):
         if not amount.isnumeric():

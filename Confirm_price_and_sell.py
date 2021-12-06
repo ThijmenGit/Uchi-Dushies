@@ -42,11 +42,11 @@ def sell():
         if outcome == True:
             portfolio = sell_stock(stock_info)
             df = pd.DataFrame(portfolio, columns = ['Tracker', 'Name', 'Region', 'Currency', 'Price', 'Timestamp', 'Buy/Sell'])
-            print("Current sell transaction: \n", df, "\n")
+            # print("Current sell transaction: \n", df, "\n")
             df['Price'] = df['Price'].astype(float)
             portfoliosum = round(df['Price'].sum(),3)
             print(f"The value of this transaction is {stock_info['Currency']} {portfoliosum}")
-            return df
+            return df, portfoliosum
 
         elif outcome == False:
             sell()

@@ -50,9 +50,10 @@ while True:
             print(message)
             wait = input("Press enter to continue to the main menu.")
         elif int(action) == 5:  # SELL STOCK
-            stock_sold = sell()
-            user.remove_stock_from_portfolio(stock_sold)
-            print('hi')
+            stock_sold, transaction_value = sell()
+            message = user.remove_stock_from_portfolio(stock_sold, transaction_value)
+            print(message)
+            wait = input("Press enter to continue to the main menu.")
     except ValueError:
         print("!!!!! You didn't enter a menu option number, you can try again in 3 seconds.")
         time.sleep(3)
