@@ -5,8 +5,10 @@ class APIRequest:
     def __init__(self):
         return
 
-    @staticmethod
-    def getstockmetadata(): 
+
+
+    #@staticmethod
+    def getstockmetadata(self):
         try:
             query = input("What would you like: ")
 
@@ -19,12 +21,12 @@ class APIRequest:
                 counter += 1
                 print(f"Option {counter}: \n \t Company name is: {item['2. name']} \n \t Tracker is: {item['1. symbol']} \n \t Region is: {item['4. region']} \n \t Currency is: {item['8. currency']}")
 
-            option = int(input("Enter the option number of the stock you want to buy: "))
+            option = int(input("Enter the option number of the stock you want data for: "))
             stockmetadata = (data['bestMatches'][option-1])
             return stockmetadata
         except ValueError:
             print("No stock data available for this stock, please try another one")
-            getstockmetadata()
+            self.getstockmetadata()
 
     @staticmethod
     def getcurrentvalue(stockname):
@@ -57,8 +59,7 @@ class APIRequest:
 
     @staticmethod
     def stockpackage(stockmetadata, stockprice):
-        stock = {'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur',
-                 'Lastprice': '2.78'}
+
         dict1 = stockmetadata
         dict2 = stockprice
         dict3 = dict(dict1, **dict2)
@@ -68,7 +69,7 @@ class APIRequest:
             dict3.pop(keys)
 
         old_key = ['1. symbol', '2. name', '4. region', '8. currency', '4. close']
-        new_key = ['Tracker', 'Name', 'Region', 'Currency', 'Buyingprice']
+        new_key = ['Tracker', 'Name', 'Region', 'Currency', 'Price']
         count = 0
         for items in old_key:
             dict3[new_key[count]] = dict3.pop(old_key[count])
