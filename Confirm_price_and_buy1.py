@@ -4,6 +4,7 @@ from InvestmentGame import APIRequest
 portfolio = []
 
 stockmetadata = APIRequest.getstockmetadata()
+print(stockmetadata)
 stockprice = APIRequest.getcurrentvalue(stockmetadata)
 stock_to_buy = APIRequest.stockpackage(stockmetadata, stockprice)
 
