@@ -35,6 +35,7 @@ class User:
     def add_stock_to_portfolio(self, stock_df, transaction_value):
         if transaction_value > self.balance:
             return "Your balance is not sufficient. Please try again."
+        self.balance = self.balance - transaction_value
         self.portfolio = self.portfolio.append(stock_df)
         self._write_portfolio_to_file()
         return "The stocks have been added to your portfolio, congratulations!"
