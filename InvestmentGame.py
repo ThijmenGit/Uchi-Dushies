@@ -24,8 +24,8 @@ class APIRequest:
         stockmetadata = (data['bestMatches'][option-1])
         return stockmetadata
 
-
-    def getcurrentvalue(self, stockname):
+    @staticmethod
+    def getcurrentvalue(stockname):
         df = []
         tracker = stockname['1. symbol']
         url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={tracker}&outputsize=full&apikey=73R6EIWTFXMUJFO0"
@@ -36,7 +36,7 @@ class APIRequest:
 
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
-        df.append(raw_data['Time Series (Daily)'][datetime.date.today().strftime(str(yesterday))])
+        df.append(raw_data['Time Series (Daily)'][yesterday.strftime('%Y-%d-%m')])
         return(df[0])
 
 #'%Y-%d-%m'
@@ -53,7 +53,8 @@ class APIRequest:
         return(df[0])
         #fix stockdate
 
-    def stockpackage(self, stockmetadata, stockprice):
+    @staticmethod
+    def stockpackage(stockmetadata, stockprice):
         stock = {'Tracker': 'KPN.AMS', 'Name': 'Koninklijke KPN N.V.', 'Region': 'Amsterdam', 'Currency': 'Eur',
                  'Lastprice': '2.78'}
         dict1 = stockmetadata
