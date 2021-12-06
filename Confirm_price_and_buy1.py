@@ -26,8 +26,8 @@ def buy_stock(stock_to_buy):
             stock_to_buy["Buy/Sell"] = 1
             portfolio.append(stock_to_buy)
         print(float(stock_to_buy['Price']))
-        transaction_price = round(float(stock_to_buy['Price']) * amount,3)
-        print(f"The total value of this transaction will be €{transaction_price} ")
+        #transaction_price = round(float(stock_to_buy['Price']) * amount,3)
+        #print(f"The total value of this transaction will be €{transaction_price} ")
         return portfolio
     except ValueError:
        print("This is not a recognized input. Please insert a round number")
@@ -51,7 +51,7 @@ def purchase():
             df['Price'] = df['Price'].astype(float)
             portfoliosum = round(df['Price'].sum(),3)
             print(f"The value of this transaction is {stock_info['Currency']} {portfoliosum}")
-            return df
+            return df, portfoliosum
 
         elif outcome == False:
             purchase()

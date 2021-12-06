@@ -45,8 +45,8 @@ while True:
             print(user.get_portfolio())
             wait = input("Press enter to continue to the main menu.")
         elif int(action) == 4:  # BUY STOCK
-            stocks_bought = purchase()
-            user.add_stock_to_portfolio(stocks_bought)
+            stocks_bought, transaction_value = purchase()
+            user.add_stock_to_portfolio(stocks_bought, transaction_value)
             wait = input("Press enter to continue to the main menu.")
         elif int(action) == 5:  # SELL STOCK
             stock_sold = sell()

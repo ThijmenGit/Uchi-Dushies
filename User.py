@@ -32,16 +32,12 @@ class User:
             ['Name'])['Buy/Sell'].agg('sum')
         return grouped_by_stock.to_string()
 
-    def add_stock_to_portfolio(self, stock_df):
-        # print("DF PORTFOLIO -------------------------")
-        # print(self.portfolio)
-        # print("STOCKS BOUGHT PORTFOLIO -------------------------")
-        # print(stock_df)
-        # print("MERGED PORTFOLIO -------------------------")
+    def add_stock_to_portfolio(self, stock_df, transaction_value):
+        if transaction_value > self.balance:
+            return "Your balance is not sufficient. Please try again."
         self.portfolio = self.portfolio.append(stock_df)
-        # print(self.portfolio)
         self._write_portfolio_to_file()
-        return True
+        return "The stocks have been added to your portfolio, congratulations!"
 
     def remove_stock_from_portfolio(self, stock_df):
         # todo check if stocks can be sold before appending to prevent < 0
